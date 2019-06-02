@@ -14,7 +14,7 @@ app.use(express.static('./public'));
 const cart = require('./cartItems');
 
 // use and setup items route
-app.use('/cart-item', cart);
+app.use('/cart-items', cart);
 
 // define the port
 const port = process.env.PORT || 7878;

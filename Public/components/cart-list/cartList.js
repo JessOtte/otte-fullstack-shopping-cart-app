@@ -2,252 +2,301 @@ function ItemList (CartService) {
   const ctrl = this;
   ctrl.cart= [];
 
-  ctrl.cartList = () => {
-    CartService.getCart()
-
-    .then( (data) => {
-      console.log(data);
-
-      data.forEach(function(item) {
-        let cartObj = {
-          id: item.id,
-          product: item.product,
-          price: item.price,
-          count: item.count,
-          img: item.img
-        }
-        ctrl.cart.push(cartObj);
-      })
-
-    })
-
-    .catch( (error) => {
-      console.log(error);
-  })
-
-  }  
-// Constructor
-ctrl.saveCart = (product, price, count, img) => {
-  let item  = {
-      product: product,
-      price: price,
-      count: count,
-      image: img
-  }
-    // Save cart
-  CartService.sessionStorage.pushToCart('ctrl.cart', JSON.stringify(item))
-  CartService.sessionStorage.reloadData();
-}
-
-// function saveCart() {
-//   sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
-// }
-
-  // Load cart
-function loadCart() {
-  cart = JSON.parse(sessionStorage.getItem('ctrl.cart'));
-}
-if (sessionStorage.getItem("ctrl.cart") != null) {
-  loadCart();
-}
-
-
-// =============================
-// Public methods and propeties
-// =============================
-let obj = {};
-
-// Add to cart
-obj.addItemToCart = function(product, price, count) {
-  for(let item in cart) {
-    if(cart[item].product === product) {
-      cart[item].count ++;
-      saveCart();
-      return;
-    }
-  }
-  let item = new Item(product, price, count);
-  cart.push(item);
-  saveCart();
-}
-// Set count from item
-obj.setCountForItem = function(product, count) {
-  for(let i in cart) {
-    if (cart[i].product === product) {
-      cart[i].count = count;
-      break;
-    }
-  }
-};
-// Remove item from cart
-obj.removeItemFromCart = function(product) {
-    for(let item in cart) {
-      if(cart[item].product === product) {
-        cart[item].count --;
-        if(cart[item].count === 0) {
-          cart.splice(item, 1);
-        }
-        break;
-      }
-  }
-  saveCart();
-
   
     // ************************************************
 // Shopping Cart API
 // ************************************************
 
-  // Remove all items from cart
-  obj.removeItemFromCartAll = function(product) {
-    for(let item in cart) {
-      if(cart[item].product === product) {
-        cart.splice(item, 1);
-        break;
-      }
+
+// LOADS CART
+    ctrl.cartList = () => {
+      CartService.getCart()
+
+      .then( (data) => {
+        console.log(data);
+
+        data.forEach(function(item) {
+          let cartObj = {
+            id: item.id,
+            product: item.product,
+            price: item.price,
+            count: item.count,
+          }
+          ctrl.cart.push(cartObj);
+        })
+
+      })
+
+      .catch( (error) => {
+        console.log(error);
+    })
+
+    }  
+  // POST - Adds item to cart
+  ctrl.addToCart = (product, price, count) => {
+    let item  = {
+        product: product,
+        price: price,
+        count: count,
     }
-    saveCart();
-  }
+    CartService.addItem(JSON.stringify(item))
+    CartService.reloadData();
+}
+  
+  // // Save cart
+  // function addToCart() {
+  //   sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
+  // }
+  
+    // Load cart
+  // function loadCart() {
+  //   cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+  // }
+  // if (sessionStorage.getItem("shoppingCart") != null) {
+  //   loadCart();
+  // }
+  
+
+  // =============================
+  // Public methods and propeties
+  // =============================
+  // let ctrl = {};
+  
+  // Add to cart
+  // ctrl.updateCartItem = (product, price, count) => {
+  //   for(let item in cart) {
+  //     if(cart[item].product === product) {
+  //       cart[item].count ++;
+  //       addToCart();
+  //       return;
+  //     }
+  //   }
+  //   let item = new Item(product, price, count);
+  //   cart.push(item);
+  //   addToCart();
+  // }
+  ctrl.updateCartItem = (product, price, count) => {
+    let item  = {
+        product: product,
+        price: price,
+        count: count,
+    }
+    console.log(item.id);
+
+    CartService.updateItem(JSON.stringify(item))
+    CartService.reloadData();
+}
+
+  // Set count from item
+  // ctrl.setCountForItem = function(product, count) {
+  //   for(let i in cart) {
+  //     if (cart[i].product === product) {
+  //       cart[i].count = count;
+  //       break;
+  //     }
+  //   }
+  // };
+
+
+
+
+  // Remove item from cart
+  // ctrl.removeItemFromCart = function(product) {
+  //     for(let item in cart) {
+  //       if(cart[item].product === product) {
+  //         cart[item].count --;
+  //         if(cart[item].count === 0) {
+  //           cart.splice(item, 1);
+  //         }
+  //         break;
+  //       }
+  //   }
+  //   addToCart();
+  // }
+
+  ctrl.deleteCartItem = (id) => {
+    CartService.removeItem(id);
+    CartService.reloadData();
+
+
+}
+
+  // // Remove all items from cart
+  // ctrl.removeItemFromCartAll = function(product) {
+  //   for(let item in cart) {
+  //     if(cart[item].product === product) {
+  //       cart.splice(item, 1);
+  //       break;
+  //     }
+  //   }
+  //   addToCart();
+  // }
 
   // Clear cart
-  obj.clearCart = function() {
-    cart = [];
-    saveCart();
-  }
+  // ctrl.clearCart = function() {
+  //   cart = [];
+  //   addToCart();
+  // }
 
 
+  // ///////\
+    // ///////
+      // ///////
+        // ///////
+          // ///////
+            // ///////
+              // ///////
 
 
   // UPDATING THE DISPLAY TEXT ONLY
   
   // List cart
-  obj.listCart = function() {
-    let cartCopy = [];
-    for(i in cart) {
-      item = cart[i];
-      itemCopy = {};
-      for(p in item) {
-        itemCopy[p] = item[p];
+  // ctrl.listCart = function() {
+  //   let cartCopy = [];
+  //   for(i in cart) {
+  //     item = cart[i];
+  //     itemCopy = {};
+  //     for(p in item) {
+  //       itemCopy[p] = item[p];
 
-      }
-      itemCopy.total = Number(item.price * item.count).toFixed(2);
-      cartCopy.push(itemCopy)
-    }
-    return cartCopy;
-  }  
+  //     }
+  //     itemCopy.total = Number(item.price * item.count).toFixed(2);
+  //     cartCopy.push(itemCopy)
+  //   }
+  //   return cartCopy;
+  // }  
   
-  // Count cart 
-  obj.totalCount = function() {
-    let totalCount = 0;
-    for(let item in cart) {
-      totalCount += cart[item].count;
-    }
-    return totalCount;
-  }
+  // // Count cart 
+  // ctrl.totalCount = function() {
+  //   let totalCount = 0;
+  //   for(let item in cart) {
+  //     totalCount += cart[item].count;
+  //   }
+  //   return totalCount;
+  // }
 
-  // Total cart
-  obj.totalCart = function() {
-    let totalCart = 0;
-    for(let item in cart) {
-      totalCart += cart[item].price * cart[item].count;
-    }
-    return Number(totalCart.toFixed(2));
-  }
+  // // Total cart
+  // ctrl.totalCart = function() {
+  //   let totalCart = 0;
+  //   for(let item in cart) {
+  //     totalCart += cart[item].price * cart[item].count;
+  //   }
+  //   return Number(totalCart.toFixed(2));
+  // }
 
+
+
+  // ///////
+  // ///////
+    // ///////
+      // ///////
+        // ///////
+          // ///////
+
+            // ///////
+
+              // ///////
 
 
   // cart : Array
   // Item : Object/Class
-  // addItemToCart : Function
+  // updateCartItem : Function
   // removeItemFromCart : Function
   // removeItemFromCartAll : Function
   // clearCart : Function
   // countCart : Function
   // totalCart : Function
   // listCart : Function
-  // saveCart : Function
+  // addToCart : Function
   // loadCart : Function
-  return obj;
-};
-
-
-// *****************************************
-// Triggers / Events
-// ***************************************** 
-// Add item
-$('.add-to-cart').click(function(event) {
-  event.preventDefault();
-  let product = $(this).data('product');
-  let price = Number($(this).data('price'));
-  ctrl.cart.addItemToCart(product, price, 1);
-  displayCart();
-});
-
-// Clear items
-$('.clear-cart').click(function() {
-  ctrl.cart.clearCart();
-  displayCart();
-});
-
-
-function displayCart() {
-  let cartArray = ctrl.cart.listCart();
-  let output = "";
-  for(let i in cartArray) {
-    output += "<tr>"
-      + "<td>" + cartArray[i].product + "</td>" 
-      + "<td>(" + cartArray[i].price + ")</td>"
-      + "<td><div class='input-group'><button class='minus-item input-group-addon btn btn-primary' data-product=" + cartArray[i].product + ">-</button>"
-      + "<input type='number' class='item-count form-control' data-product='" + cartArray[i].product + "' value='" + cartArray[i].count + "'>"
-      + "<button class='plus-item btn btn-primary input-group-addon' data-product=" + cartArray[i].product + ">+</button></div></td>"
-      + "<td><button class='delete-item btn btn-danger' data-product=" + cartArray[i].product + ">X</button></td>"
-      + " = " 
-      + "<td>" + cartArray[i].total + "</td>" 
-      +  "</tr>";
-  }
-  $('.show-cart').html(output);
-  $('.total-cart').html(ctrl.cart.totalCart());
-  $('.total-count').html(ctrl.cart.totalCount());
-}
-
-// Delete item button
-
-$('.show-cart').on("click", ".delete-item", function(event) {
-  let product = $(this).data('product')
-  ctrl.cart.removeItemFromCartAll(product);
-  displayCart();
-})
-
-
-// -1
-$('.show-cart').on("click", ".minus-item", function(event) {
-  let product = $(this).data('product')
-  ctrl.cart.removeItemFromCart(product);
-  displayCart();
-})
-// +1
-$('.show-cart').on("click", ".plus-item", function(event) {
-  let product = $(this).data('product')
-  ctrl.cart.addItemToCart(product);
-  displayCart();
-})
-
-// Item count input
-$('.show-cart').on("change", ".item-count", function(event) {
-   let product = $(this).data('product');
-   let count = Number($(this).val());
-   ctrl.cart.setCountForItem(product, count);
-  displayCart();
-});
-
-displayCart();
+  // return ctrl;
+  ctrl.cartList();
+  CartService.getCart()
 
 
 
 
-ctrl.cartList();
+
+
+// // *****************************************
+// // Triggers / Events
+// // ***************************************** 
+// // Add item
+// $('.add-to-cart').click(function(event) {
+//   event.preventDefault();
+//   let product = $(this).data('product');
+//   let price = Number($(this).data('price'));
+//   shoppingCart.updateCartItem(product, price, 1);
+//   displayCart();
+// });
+
+// // Clear items
+// $('.clear-cart').click(function() {
+//   shoppingCart.clearCart();
+//   displayCart();
+// });
+
+
+// function displayCart() {
+//   let cartArray = shoppingCart.listCart();
+//   let output = "";
+//   for(let i in cartArray) {
+//     output += "<tr>"
+//       + "<td>" + cartArray[i].product + "</td>" 
+//       + "<td>(" + cartArray[i].price + ")</td>"
+//       + "<td><div class='input-group'><button class='minus-item input-group-addon btn btn-primary' data-product=" + cartArray[i].product + ">-</button>"
+//       + "<input type='number' class='item-count form-control' data-product='" + cartArray[i].product + "' value='" + cartArray[i].count + "'>"
+//       + "<button class='plus-item btn btn-primary input-group-addon' data-product=" + cartArray[i].product + ">+</button></div></td>"
+//       + "<td><button class='delete-item btn btn-danger' data-product=" + cartArray[i].product + ">X</button></td>"
+//       + " = " 
+//       + "<td>" + cartArray[i].total + "</td>" 
+//       +  "</tr>";
+//   }
+//   $('.show-cart').html(output);
+//   $('.total-cart').html(shoppingCart.totalCart());
+//   $('.total-count').html(shoppingCart.totalCount());
+
+
+// // Delete item button
+
+// $('.show-cart').on("click", ".delete-item", function(event) {
+//   let product = $(this).data('product')
+//   shoppingCart.removeItemFromCartAll(product);
+//   displayCart();
+// })
+
+
+// // -1
+// $('.show-cart').on("click", ".minus-item", function(event) {
+//   let product = $(this).data('product')
+//   shoppingCart.removeItemFromCart(product);
+//   displayCart();
+// })
+// // +1
+// $('.show-cart').on("click", ".plus-item", function(event) {
+//   let product = $(this).data('product')
+//   shoppingCart.updateCartItem(product);
+//   displayCart();
+// })
+
+// // Item count input
+// $('.show-cart').on("change", ".item-count", function(event) {
+//    let product = $(this).data('product');
+//    let count = Number($(this).val());
+//   shoppingCart.setCountForItem(product, count);
+//   displayCart();
+// });
+
+// displayCart();
+
+
+
+
+// ctrl.cartList();
 
  
-  }
+  // }}
+}
 
 angular.module("CartApp")
 .component('cartList', {
@@ -289,9 +338,9 @@ angular.module("CartApp")
 <img class="card-img-top" src="imgs/catfood.jpg" alt="Cat Food">
 <div class="card-block">
 
-<h4 id="product" class="card-title">Cat Food</h4>
-<p class="card-text">Price: $5.00</p>
-<button data-product="Cat-Food" data-price="5.00" class="add-to-cart btn btn-primary" ng-click="$ctrl.saveCart($ctrl.product, $ctrl.price, count, $ctrl.img)">Add to cart</a>
+<h4 id="product" class="card-title" ng-model="newProduct" ng-view="track by item.name">Cat Food</h4>
+<p class="card-text" ng-model="newProduct" ng-view="track by item.name">Price: $5.00</p>
+<button data-product="Cat-Food" data-price="5.00" class="add-to-cart btn btn-primary" ng-click="$ctrl.addToCart(newProduct.name, newProduct.price, newQuantity, newProduct.image)">Add to cart</button>
 </div>
 </div>
 </div>
@@ -380,6 +429,15 @@ angular.module("CartApp")
          </div>
        </div>
      </div>  
+
+
+
+
+
+
+
+
+     
 
 
     
