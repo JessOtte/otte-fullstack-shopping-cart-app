@@ -2,6 +2,44 @@ function ItemList (CartService) {
   const ctrl = this;
   ctrl.cart= [];
 
+
+  ctrl.cartData = [
+
+    {
+    id:"0",
+    product: "cat-food",
+    price: "5",
+    quantity: "1",
+    },
+    {
+    id:"1",
+    product: "dog-food",
+    price: "5",
+    quantity: "2",
+    },
+    {
+    id:"2",
+    product: "Human Food",
+    price: "10",
+    quantity: "2",
+    },
+    {
+    id:"3",
+    product: "Fish Food",
+    price: "1",
+    quantity: "5",    },
+    {
+    id:"4",
+    product: "Turtle Food",
+    price: "4",
+    quantity: "2",
+ },
+ {
+  id:"5",
+  product: "Rabbit Food",
+  price: "2",
+  quantity: "1",
+}];
   
     // ************************************************
 // Shopping Cart API
@@ -306,11 +344,11 @@ angular.module("CartApp")
 
 
 
-<!--
+
     <div class="container">
     <div class="row text-center">
 
-    <div class="col" ng-repeat = "cartData in $ctrl.cartData">
+    <div class="col" ng-repeat ="cartData in $ctrl.cartData" ng-view="track by item.name">
     <div class="card" style="width: 20rem;">
   <div class="card-block">
     <h5 class="card-title">{{cartData.product}}</h5>
@@ -319,16 +357,16 @@ angular.module("CartApp")
     <p>Quantity: {{cartData.quantity}}</p>
     <button>Edit quantity</button>
     <br>
-    <a href="#" data-product="{{cartData.product}}" data-price="{{cartData.price}}" class="add-to-cart btn btn-primary" ng-click="">Add to Cart</a>
+    <button data-product="{{cartData.product}}" data-price="{{cartData.price}}" class="add-to-cart btn btn-primary" ng-click="$ctrl.addToCart(cartData.product, cartData.price, cartData.quantity, cartData.image)">Add to cart</button>
   </div>
     
 
   </div>
   </div>
   </div>
-  </div> -->
+  </div> 
 
-
+<!--
   <div class="container">
   <div class="row text-center">
 
@@ -400,7 +438,7 @@ angular.module("CartApp")
 
 
 
-
+-->
 
 
 

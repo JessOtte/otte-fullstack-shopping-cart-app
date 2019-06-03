@@ -26,7 +26,7 @@ cart.get("/", (req, res) => {
 
 cart.post("/", (req, res) => {
     let data = req.body;
-    pool.query("INSERT INTO shoppingcart (product, price, count) values($1::text, $2::float, $3::int, $4::text)",[data.product, data.price, data.count])
+    pool.query("INSERT INTO shoppingcart (product, price, count) values($1::text, $2::float, $3::int)",[data.product, data.price, data.count])
     .then( () => {
         res.status(201);
         res.send(data.body);
