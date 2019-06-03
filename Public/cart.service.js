@@ -44,7 +44,7 @@ function CartService($http, $q, $window) {
 
   // UPDATES THE CART - BASED ON USER INPUT
 
-  service.updateItem = (item, id) => {
+  service.updateItem = (item) => {
     return $http({
       url: "/cart-items/" + id,
       method: "PUT",
