@@ -19,16 +19,16 @@ function CartService($http, $q, $window) {
 
  // REMOVES ITEM FROM CART - BASED ON USER INPUT
 
- service.removeItem = (id) => {
-    return $http({
-      url: `/cart-items/${id}`,
-      method: "DELETE",
-      data: id
-    }).then((response) => {
-      console.log(id);
-      return response.data;
-    });
-  }
+ service.removeItem = (product) => {
+  return $http({
+    url: `/cart-items/${product}`,
+    method: "DELETE",
+    data: product
+  }).then((response) => {
+    console.log(product);
+    return response.data;
+  });
+}
 
   // ADDS ITEM TO CART - BASED ON USER INPUT FROM FORM
 
