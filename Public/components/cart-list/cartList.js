@@ -30,7 +30,7 @@ function ItemList (CartService) {
       quantity: "5",    },
       {
       id:"4",
-      product: "turtle-food",
+      product: "turtle-food", 
       price: "4",
       quantity: "2",
    },
@@ -49,6 +49,7 @@ function ItemList (CartService) {
         .then( (data) => {
           console.log(data);
   
+          let cart = [];
           data.forEach(function(item) {
             let cartObj = {
               id: item.id,
@@ -56,8 +57,10 @@ function ItemList (CartService) {
               price: item.price,
               count: item.count,
             }
-            ctrl.cart.push(cartObj);
-          })
+            cart.push(cartObj);
+          });
+
+          ctrl.cart = cart;
   
         })
   
@@ -74,33 +77,32 @@ function ItemList (CartService) {
           count: count,
       }
       CartService.addItem(JSON.stringify(item))
-      CartService.reloadData();
+      .then( () => {
+        ctrl.cartList();
+      })
   }
     
-    ctrl.updateCartItem = (product, price, count) => {
-      let item  = {
-          product: product,
-          price: price,
-          count: count,
-      }
+    ctrl.updateCartItem = (item, count) => {
       console.log(item.id);
+
+
+      item.count = count;
   
-      CartService.updateItem(JSON.stringify(item))
-      CartService.reloadData();
+      CartService.updateItem(item)
+      .then( () => {
+        ctrl.cartList();
+      })
   }
   
   
     ctrl.deleteCartItem = (id) => {
       CartService.removeItem(id);
-      CartService.reloadData();
+      ctrl.cartList();
   
   
   }
   
     ctrl.cartList();
-    CartService.getCart()
-  
-  
   }
   angular.module("CartApp")
 .component('cartList', {
@@ -127,20 +129,20 @@ function ItemList (CartService) {
 
   <h2> Shopping Cart </h2><br>
 
-  <div class="col" ng-repeat ="cartData in $ctrl.cart" ng-view="track by item.name">
+  <div class="col" ng-repeat ="item in $ctrl.cart" ng-view="track by item.name">
   <div class="card" style="width: 20rem;">
     <div class="card-block">
       
-      <h5 class="card-title">{{cartData.product}} #{{cartData.id}}</h5>
-      <p class="card-text"><small class="text-muted">Price: $\{{cartData.price}}</small></p>
+      <h5 class="card-title">{{item.product}} #{{item.id}}</h5>
+      <p class="card-text"><small class="text-muted">Price: $\{{item.price}}</small></p>
       <br>
-      <p>count: {{cartData.count}}</p>
+      <p>count: {{item.count}}</p>
       <form>
-        <input type="number"/>
-        <button data-count="{{cartData.count}}" ng-click="$ctrl.updateCartItem(cartData.count)">Update</button>
+        <input type="number" ng-model="count" />
+        <button data-count="{{item.count}}" ng-click="$ctrl.updateCartItem(item, count)">Update</button>
       </form>
       <br>
-      <button data-product="{{cartData.product}}" data-id="{{cartData.id}}" ng-click="$ctrl.deleteCartItem(cartData.id)">Remove</button>
+      <button data-product="{{item.product}}" data-id="{{item.id}}" ng-click="$ctrl.deleteCartItem(item.id)">Remove</button>
   </div>
   
 

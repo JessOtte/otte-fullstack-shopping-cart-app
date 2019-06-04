@@ -46,7 +46,7 @@ function CartService($http, $q, $window) {
 
   service.updateItem = (item) => {
     return $http({
-      url: "/cart-items/" + id,
+      url: "/cart-items/" + item.id,
       method: "PUT",
       data: item
     }).then((response) => {
@@ -55,7 +55,7 @@ function CartService($http, $q, $window) {
   }
 
   service.reloadData = function () {
-    $window.location.reload();
+    // $window.location.reload();
 }
 
 }

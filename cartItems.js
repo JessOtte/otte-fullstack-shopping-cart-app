@@ -7,7 +7,7 @@ const cart = express.Router();
 const pg = require("pg");
 const pool = new pg.Pool({
   user: "postgres",
-  password: "",
+  password: "adrenalinerush8",
   host: "localhost",
   port: 5432,
   database: "ExpressShopDB",
@@ -26,6 +26,10 @@ cart.get("/", (req, res) => {
 
 cart.post("/", (req, res) => {
     let data = req.body;
+
+    if ( !data.count ) {
+        data.count = 1;
+    }
     pool.query("INSERT INTO shoppingcart (product, price, count) values($1::text, $2::real, $3::int)",[data.product, data.price, data.count])
     .then( () => {
         res.status(201);
@@ -34,7 +38,8 @@ cart.post("/", (req, res) => {
 });
 
 cart.put("/:id", (req, res) => {
-    pool.query("UPDATE shoppingcart SET count=$1::int WHERE id=$2::int", [req.body.count, req.body.id])
+    console.log(req.body, req.params);
+    pool.query("UPDATE shoppingcart SET count=$1::int WHERE id=$2::int", [req.body.count, req.params.id])
     .then( () => {
         res.send("Cart Item Updated!");
     })
